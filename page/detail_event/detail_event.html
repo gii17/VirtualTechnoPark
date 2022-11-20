@@ -1,0 +1,1241 @@
+<!DOCTYPE html>
+<html lang="zxx"> 
+    <head>
+        <!-- meta tag -->
+        <meta charset="utf-8">
+        <title>Evenio - Events & Conference HTML Template</title>
+        <meta name="description" content="">
+        <!-- responsive tag -->
+        <meta http-equiv="x-ua-compatible" content="ie=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <!-- favicon -->
+        <link rel="apple-touch-icon" href="apple-touch-icon.png">
+        <link rel="shortcut icon" type="image/x-icon" href="../../assets/images/fav.png">
+        <!-- Bootstrap v4.4.1 css -->
+        <link rel="stylesheet" type="text/css" href="../../assets/css/bootstrap.min.css">
+        <!-- font-awesome css -->
+        <link rel="stylesheet" type="text/css" href="../../assets/css/font-awesome.min.css">
+        <!-- flaticon css -->
+        <link rel="stylesheet" type="text/css" href="../../assets/fonts/flaticon.css">
+        <!-- animate css -->
+        <link rel="stylesheet" type="text/css" href="../../assets/css/animate.css">
+        <!-- owl.carousel css -->
+        <link rel="stylesheet" type="text/css" href="../../assets/css/owl.carousel.css">
+        <!-- off canvas css -->
+        <link rel="stylesheet" type="text/css" href="../../assets/css/off-canvas.css">
+        <!-- magnific popup css -->
+        <link rel="stylesheet" type="text/css" href="../../assets/css/magnific-popup.css">
+        <!-- Main Menu css -->
+        <link rel="stylesheet" href="../../assets/css/rsmenu-main.css">
+        <!-- spacing css -->
+        <link rel="stylesheet" type="text/css" href="../../assets/css/rs-spacing.css">
+        <!-- style css -->
+        <link rel="stylesheet" type="text/css" href="../../style.css"> <!-- This stylesheet dynamically changed from style.less -->
+        <!-- responsive css -->
+        <link rel="stylesheet" type="text/css" href="../../assets/css/responsive.css">
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.9.1/font/bootstrap-icons.css">
+        
+    </head>
+    <style>
+        * {
+           margin: 0;
+           padding: 0;
+           outline: none;
+           box-sizing: border-box;
+           font-family: sans-serif;
+       }
+       
+       body {
+           height: 100%;
+           width: 100%;
+           /* background: linear-gradient(115deg, #56d8e4 10%, #9f01ea 90%); */
+       }
+       
+       .show-btn {
+           background: #fff;
+           padding: 10px 20px;
+           font-size: 20px;
+           font-weight: 500;
+           color: #3498bd;
+           cursor: pointer;
+           box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+       }
+       
+       .show-btn, .container1 {
+           position: absolute;
+           top: 50%;
+           left: 50%;
+           transform: translate(-50%, -50%);
+       }
+       
+       .show-login-btn {
+           background: #fff;
+           padding: 10px 20px;
+           font-size: 20px;
+           font-weight: 500;
+           color: #3498bd;
+           cursor: pointer;
+           box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+       }
+       
+       .show-login-btn, .container1 {
+           position: absolute;
+           top: 50%;
+           left: 50%;
+           transform: translate(-50%, -50%);
+       }
+       
+       input[type="checkbox"] {
+           display: none;
+       }
+       
+       .container1 {
+           display: none;
+           background: #fff;
+           width: 500px;
+           padding: 30px;
+           position:absolute;
+           left:60%;
+           top:70%;
+           z-index: 1;
+           margin-left:-150px; 
+           margin-top:-120px; 
+           border-radius: 20px;
+           box-shadow: 0 0 8px rgba(0, 0, 0, 0.1);
+       }
+       
+       #show:checked ~ .container1 {
+           display: block;
+       }
+       
+       #show-login:checked ~ .container1 {
+           display: block;
+       }
+       
+       .container1 .close-btn {
+           position: absolute;
+           right: 20px;
+           top: 15px;
+           font-size: 25px;
+           cursor: pointer;
+       }
+       
+       .container1 .close-btn:hover {
+           color: #3498db;
+       }
+       
+       .container1 .text {
+           font-size: 35px;
+           font-weight: 600;
+           text-align: center;
+       }
+       
+       .container1 form {
+           margin-top: -20px;
+       }
+       
+       .container1 form .data {
+           height: 45px;
+           width: 100%;
+           margin: 40px 0;
+       }
+       
+       form .data label {
+           font-size: 18px;
+       }
+       
+       form .data input {
+           height: 100%;
+           width: 100%;
+           padding-left: 10px;
+           font-size: 17px;
+           border: 1px solid silver;
+           border-radius: 10px;
+       }
+       
+       form .data input:focus {
+           color: #3498bd;
+           border-bottom-width: 2px;
+       }
+       
+       form .forget-pass {
+           margin-top: -8px;
+       }
+       
+       form .forget-pass a {
+           color: #3498bd;
+           text-decoration: none;
+       }
+       
+       form .forget-pass a:hover {
+           text-decoration: underline;
+       }
+       
+       form .btn {
+           margin: 30px 0;
+           height: 45px;
+           width: 100%;
+           position: relative;
+           overflow: hidden;
+       }
+       
+       form .btn .inner {
+           height: 100%;
+           width: 300%;
+           position: absolute;
+           left: -100%;
+           z-index: -1;
+           background: black;
+           transition: all 0.4s;
+           border-radius: 10px;
+       }
+       
+       form .btn:hover .inner {
+           left: 0;
+       }
+       
+       form .btn button {
+           height: 100%;
+           width: 100%;
+           background: none;
+           border: none;
+           color: #fff;
+           font-size: 18px;
+           font-weight: 500;
+           text-transform: uppercase;
+           letter-spacing: 1px;
+           cursor: pointer;
+       }
+       
+       form .signup-link {
+           text-align: center;
+       }
+       
+       form .signup-link a {
+           color: #3498bd;
+           text-decoration: none;
+       }
+       
+       form .signup-link a:hover {
+           text-decoration: underline;
+       }
+     
+       @media (min-width: 700px) and (max-width: 916px) { 
+           .social-info{
+               margin-left: 400px;
+               margin-top: -105px ;
+               width: 80px;
+           
+           }
+               
+           .social-info1{
+               margin-left: 400px;
+               margin-bottom: -100px ;
+               width: 80px;
+               
+           }
+
+           .readon{
+               margin-bottom: -80px ;
+           }
+       }
+       
+       @media (min-width: 917px) and (max-width: 1000px) { 
+           .social-info{
+               margin-left: 400px;
+               margin-top: -105px ;
+               width: 80px;
+           
+           }
+               
+           .social-info1{
+               margin-left: 400px;
+               margin-bottom: -100px ;
+               width: 80px;
+               
+           }
+
+           .readon{
+               margin-bottom: -80px ;
+           }
+       }
+       
+       @media (min-width: 200px) and (max-width: 768px) { 
+           .social-info{
+               margin-left: 250px;
+               margin-top: -105px ;
+               width: 80px;
+           
+           }
+               
+           .social-info1{
+               margin-left: 250px;
+               margin-bottom: -100px ;
+               width: 80px;
+               
+           }
+
+           .readon{
+               margin-top: 50px;
+           }
+
+       }
+
+       @media (min-width: 10px) and (max-width: 500px){ 
+           .social-info{
+               margin-left: 200px;
+               margin-top: -105px ;
+           }
+
+           .social-info1{
+               margin-left: 200px;
+               margin-bottom: -100px ;
+               width: 80px;
+               
+           }
+
+           
+           .readon{
+               margin-top: 50px;
+           }
+       }
+       </style>
+    <body class="defult-home">
+        
+        <div class="offwrap"></div>
+
+        <!--Preloader start here-->
+        <div id="pre-load">
+           <div id="loader" class="loader">
+               <div class="loader-container">
+                   <div class='loader-icon'><img src="../../assets/images/fav.png" alt="Evenio - Events & Conference"></div>
+               </div>
+           </div>              
+       </div>
+        <!--Preloader area end here-->
+     
+		<!-- Main content Start -->
+        <div class="main-content">
+
+            <!--Full width header Start-->
+            <div class="full-width-header">
+                <!--Header Start-->
+                <header id="rs-header" class="rs-header header-style2 header-transparent">
+                    <!-- Menu Start -->
+                    <div class="menu-area menu-sticky">
+                        <div class="container">
+                            <div class="row-table">
+                                <div class="col-cell header-logo">                                  
+                                    <div class="logo-area">
+                                        <a href="../../index.html">
+                                            <img class="normal-logo" src="../../assets/images/logo-light2.png" alt="logo">  
+                                            <img class="sticky-logo" src="../../assets/images/logo-light2.png" alt="logo">
+                                        </a>
+                                    </div>
+                                </div>
+                                <div class="col-cell">
+                                    <div class="rs-menu-area">
+                                        <div class="main-menu">
+                                            <nav class="rs-menu hidden-md">
+                                                <ul class="nav-menu">
+                                                    <li>
+                                                        <a href="../../index.html">Home</a>
+                                                    </li>
+
+
+                                                    <!-- <li class="menu-item-has-children current-menu-item">
+                                                        <a href="index.html">Home</a>
+                                                        <ul class="sub-menu">
+                                                            <li class="menu-item-has-children current-menu-item">
+                                                                <a href="#">Multipages</a>
+                                                                <ul class="sub-menu">
+                                                                    <li><a href="index.html">Home One</a></li>
+                                                                    <li class="active"><a href="index2.html">Home Two</a></li>
+                                                                    <li><a href="index3.html">Home Three</a></li>
+                                                                    <li><a href="index4.html">Home Four</a></li>
+                                                                    <li><a href="index5.html">Home Five</a></li>
+                                                                    <li><a href="index6.html">Home Six</a></li>
+                                                                </ul> 
+                                                            </li>
+                                                            <li class="menu-item-has-children">
+                                                                <a href="#">Onepages</a>
+                                                                <ul class="sub-menu">
+                                                                    <li><a href="onepage1.html">Onepage One</a></li>
+                                                                    <li><a href="onepage2.html">Onepage Two</a></li>
+                                                                    <li><a href="onepage3.html">Onepage Three</a></li>
+                                                                    <li><a href="onepage4.html">Onepage Four</a></li>
+                                                                </ul>  
+                                                            </li>
+                                                        </ul>
+                                                    </li> -->
+                                                    <li class="menu-item-has-children">
+                                                        <a href="#">Menu Page</a>
+                                                        <ul class="sub-menu">
+                                                            <li><a href="../../index.html#join">Join Technopark</a></li>
+                                                            <li><a href="../../index.html#counter">Member & Startup</a></li>
+                                                            <li><a href="../../index.html#why">Why Technopark</a></li>
+                                                            <li><a href="../../index.html#berita">News</a></li>
+                                                            <li><a href="../../index.html#event">Event & Program</a></li>
+                                                            <li><a href="../../index.html#app">Produk Apps & Software</a></li>
+                                                            <li><a href="../../index.html#industri">Supported Industry</a></li>
+                                                            <li><a href="../../index.html#assosiasi">Supported Assosiasi</a></li>
+                                                            <li><a href="../../index.html#fotter">Contact</a></li>
+                                                        </ul>
+                                                    </li>
+
+                                                    <li class="menu-item-has-children">
+                                                        <a href="#">Menu</a>
+                                                        <ul class="sub-menu">
+                                                            <li><a href="../event/event.html">Event Program</a></li>
+                                                            <li><a href="../app/app.html">Produk Apps & Software</a></li>
+                                                            <li><a href="../faq/faqs.html#">FAQ</a></li>
+                                                        </ul>
+                                                    </li>
+
+                                                   
+
+                                                    <!-- <li class="menu-item-has-children">
+                                                        <a href="#">Speakers</a>
+                                                        <ul class="sub-menu">
+                                                            <li><a href="speaker1.html">Speaker One</a></li>
+                                                            <li><a href="speaker2.html">Speaker Two</a></li>
+                                                            <li><a href="speaker3.html">Speaker Three</a></li>
+                                                            <li><a href="speaker4.html">Speaker Four</a></li>
+                                                            <li><a href="speaker5.html">Speaker Five</a></li>
+                                                            <li><a href="speaker-single.html">Speaker Single</a></li>
+                                                        </ul>
+                                                    </li> -->
+
+                                                    <!-- <li class="menu-item-has-children">
+                                                        <a href="#">Pages</a>                                                        
+                                                        <ul class="sub-menu">                                      
+                                                            <li class="last-item menu-item-has-children">
+                                                                <a href="#">Schedule</a>
+                                                                <ul class="sub-menu">
+                                                                    <li><a href="schedule-light.html">Schedule Light</a> </li>
+                                                                    <li><a href="Schedule-dark.html">Schedule Dark</a></li>
+                                                                </ul>
+                                                            </li>
+                                                            <li><a href="gallery.html">Gallery</a></li>
+                                                            <li><a href="pricing-plan.html">Pricing Plan</a></li>
+                                                            <li><a href="faqs.html">Faqs</a></li>
+                                                            <li><a href="Sponsors.html">Sponsors</a></li>
+                                                        </ul>
+                                                    </li> -->
+
+                                                    <li>
+                                                        <a href="../member/member_all.html">Member</a>
+                                                    </li>
+                                                    <li>
+                                                        <a href="../blog/blog.html">Blog</a>
+                                                    </li>
+
+                                                    <li class="menu-item-has-children">
+                                                        <a href="../tentang_kami/about.html">Tentang Kami</a>
+                                                        <ul class="sub-menu">
+                                                            <li><a href="../tentang_kami/gallery.html">Gallery</a></li>
+                                                            <li><a href="../tentang_kami/roadmap.html">Road Map</a></li>
+                                                            <li><a href="../tentang_kami/about.html">Tentang Kami</a></li>
+                                                            <li><a href="../tetang_kami/contact.html">Kontak</a></li>
+
+                                                        </ul>
+                                                    </li>
+
+                                                </ul> <!-- //.nav-menu -->
+                                            </nav>
+                                        </div> <!-- //.main-menu -->
+                                    </div>
+                                </div>
+                                <div class="col-cell">
+                                    <div class="expand-btn-inner">
+                                        <ul>
+                                            <li class="humburger">
+                                                <a id="nav-expander" class="nav-expander bar" href="#">
+                                                    <div class="bar">
+                                                        <span class="dot1"></span>
+                                                        <span class="dot2"></span>
+                                                        <span class="dot3"></span>
+                                                        <span class="dot4"></span>
+                                                        <span class="dot5"></span>
+                                                        <span class="dot6"></span>
+                                                        <span class="dot7"></span>
+                                                        <span class="dot8"></span>
+                                                        <span class="dot9"></span>
+                                                    </div>
+                                                </a>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Menu End -->
+
+                    <!-- Canvas Menu start -->
+                    <nav class="right_menu_togle menu-wrap-off  hidden-md">
+                        <div class="close-btn">
+                            <a id="nav-close" class="nav-close">
+                                <div class="line">
+                                    <span class="line1"></span>
+                                    <span class="line2"></span>
+                                </div>
+                            </a>
+                        </div>
+                        <div class="rs-offcanvas-inner">
+                            <div class="canvas-logo">
+                                <a href="index.html"><img src="../../assets/images/logo-light.png" alt="logo"></a>
+                            </div>
+                            <div class="offcanvas-text">
+                                <p>Virtual Technopark mempunyai Visi untuk menyediakan lahan seluas-luasnya untuk Technopark eksisting guna mempromosikan solusi dan kegiatannya & untuk para startup / industri kreatif yang ternaungi dalamnya. Sehingga terjadi kolaborasi antara pelaku didalam virtual technopark</p>
+                            </div>
+                            <div class="canvas-contact">
+                                <div class="address-area">
+                                    <div class="address-list">
+                                        <div class="info-icon">
+                                            <i class="flaticon-location"></i>
+                                        </div>
+                                        <div class="info-content">
+                                            <h4 class="title">Address</h4>
+                                            <em>Gatot Subroto Kav.52-53 Jakarta Selatan</em>
+                                        </div>
+                                    </div>
+                                    <div class="address-list">
+                                        <div class="info-icon">
+                                            <i class="flaticon-email"></i>
+                                        </div>
+                                        <div class="info-content">
+                                            <h4 class="title">Email</h4>
+                                            <em><a href="mailto:support@reactheme.com">virtualtechnopark@gmail.com</a></em>
+                                        </div>
+                                     </div>
+                                    <div class="address-list">
+                                        <div class="info-icon">
+                                          <i class="flaticon-call"></i>
+                                        </div>
+                                        <div class="info-content">
+                                          <h4 class="title">Phone</h4>
+                                          <em>+019988772</em>
+                                        </div>
+                                    </div>
+                                </div>
+                                <ul class="social">
+                                    <li><a href="#"><i class="fa fa-facebook"></i></a></li>
+                                    <li><a href="#"><i class="fa fa-twitter"></i></a></li>
+                                    <li><a href="#"><i class="fa fa-pinterest-p"></i></a></li>
+                                    <li><a href="#"><i class="fa fa-instagram"></i></a></li>
+                                </ul><br/>
+
+                                <div class="btn-part wow fadeinup new">
+                                    <a class="readon btn-text ticket2" href="../../page/auth/login.html">
+                                <span> Login Account </span>
+
+                            </a>
+                        </div>
+                            </div>
+                        </div>
+                    </nav>
+                    <!-- Canvas Menu end -->
+
+                    <!-- Canvas Mobile Menu start -->
+                    <nav class="right_menu_togle mobile-navbar-menu" id="mobile-navbar-menu">
+                        <div class="close-btn">
+                            <a id="nav-close2" class="nav-close">
+                                <div class="line">
+                                    <span class="line1"></span>
+                                    <span class="line2"></span>
+                                </div>
+                            </a>
+                        </div>
+                        <ul class="nav-menu">
+                            <li class="menu-item-has-children current-menu-item">
+                                <a href="index.html">Home</a>
+                                <ul class="sub-menu">
+                                    <li class="menu-item-has-children current-menu-item">
+                                        <a href="#">Multipages</a>
+                                        <ul class="sub-menu">
+                                            <li><a href="index.html">Home One</a></li>
+                                            <li><a href="index2.html">Home Two</a></li>
+                                            <li><a href="index3.html">Home Three</a></li>
+                                            <li><a href="index4.html">Home Four</a></li>
+                                            <li><a href="index5.html">Home Five</a></li>
+                                            <li><a href="index6.html">Home Six</a></li>
+                                        </ul> 
+                                    </li>
+                                    <li class="menu-item-has-children">
+                                        <a href="#">Onepages</a>
+                                        <ul class="sub-menu">
+                                            <li><a href="onepage1.html">Onepage One</a></li>
+                                            <li><a href="onepage2.html">Onepage Two</a></li>
+                                            <li><a href="onepage3.html">Onepage Three</a></li>
+                                            <li><a href="onepage4.html">Onepage Four</a></li>
+                                        </ul>  
+                                    </li>
+                                </ul>
+                            </li>
+                            <li>
+                                <a href="about.html">about</a>
+                            </li>
+                            <li class="menu-item-has-children">
+                                <a href="#">Speakers</a>
+                                <ul class="sub-menu">
+                                    <li><a href="speaker1.html">Speaker One</a></li>
+                                    <li><a href="speaker2.html">Speaker Two</a></li>
+                                    <li><a href="speaker3.html">Speaker Three</a></li>
+                                    <li><a href="speaker4.html">Speaker Four</a></li>
+                                    <li><a href="speaker5.html">Speaker Five</a></li>
+                                    <li><a href="speaker-single.html">Speaker Single</a></li>
+                                </ul>
+                            </li>
+                            <li class="menu-item-has-children">
+                                <a href="#">Pages</a>                                                        
+                                <ul class="sub-menu">                                                          
+                                    <li class="last-item menu-item-has-children">
+                                        <a href="#">Schedule</a>
+                                        <ul class="sub-menu">
+                                            <li><a href="schedule-light.html">Schedule Light</a> </li>
+                                            <li><a href="Schedule-dark.html">Schedule Dark</a></li>
+                                        </ul>
+                                    </li>
+                                    <li><a href="gallery.html">Gallery</a></li>
+                                    <li><a href="pricing-plan.html">Pricing Plan</a></li>
+                                    <li><a href="faqs.html">Faqs</a></li>
+                                    <li><a href="Sponsors.html">Sponsors</a></li>
+                                </ul>
+                            </li>
+                            <li>
+                                <a href="blog.html">Blog</a>
+                            </li>
+                            <li>
+                                <a href="contact.html">Contact</a>
+                            </li>
+                        </ul> <!-- //.nav-menu -->
+                        <div class="canvas-contact">
+                              <div class="address-area">
+                                  <div class="address-list">
+                                      <div class="info-icon">
+                                          <i class="flaticon-location"></i>
+                                      </div>
+                                      <div class="info-content">
+                                          <h4 class="title">Address</h4>
+                                          <em>Gatot Subroto Kav.52-53 Jakarta Selatan</em>
+                                      </div>
+                                  </div>
+                                  <div class="address-list">
+                                      <div class="info-icon">
+                                          <i class="flaticon-email"></i>
+                                      </div>
+                                      <div class="info-content">
+                                          <h4 class="title">Email</h4>
+                                          <em><a href="mailto:support@reactheme.com">virtualtechnopark@gmail.com</a></em>
+                                      </div>
+                                  </div>
+                                  <div class="address-list">
+                                      <div class="info-icon">
+                                          <i class="flaticon-call"></i>
+                                      </div>
+                                      <div class="info-content">
+                                          <h4 class="title">Phone</h4>
+                                          <em>+019988772</em>
+                                      </div>
+                                  </div>
+                              </div>
+                        </div>
+                    </nav>
+                    <!-- Canvas Menu end -->                    
+                </header>
+                <!--Header End-->
+            </div>
+            <!--Full width header End-->
+
+            <!-- Breadcrumbs Start -->
+            <div id="carouselExampleFade" class="carousel slide carousel-fade" data-bs-ride="carousel" style="height: 86vh;">
+                <div class="carousel-inner" style="height: 100%;transition: transform 0.5s ease, opacity .1s ease-out;">
+                  <div class="carousel-item active">
+                    <img src="../../assets/images/img-tekno/slider/slide2-tp.png" class="d-block w-100" alt="..." style="display: block; margin-left: auto; margin-right: auto; width: 100%; height: 100%; object-fit: contain;">
+                  </div>
+                  <div class="carousel-item">
+                    <img src="../../assets/images/img-tekno/slider/slide3-tp.png" class="d-block w-100" alt="..." style="display: block; margin-left: auto; margin-right: auto; width: 100%; height: 100%; object-fit: contain;">
+                  </div>
+                  <div class="carousel-item">
+                    <img src="../../assets/images/img-tekno/slider/slide1-tp.png" class="d-block w-100" alt="..." style="display: block; margin-left: auto; margin-right: auto; width: 100%; height: 100%; object-fit: contain;">
+                  </div>
+                </div>
+                <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleFade" data-bs-slide="prev">
+                  <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                  <span class="visually-hidden">Previous</span>
+                </button>
+                <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleFade" data-bs-slide="next">
+                  <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                  <span class="visually-hidden">Next</span>
+                </button>
+              </div>
+            </div>
+            <!-- Breadcrumbs End -->
+           
+            <!-- About Section Start -->
+            <div class="rs-about style1 pt-120 pb-120 md-pt-80 md-pb-75">
+                <div class="container">
+                    <div class="row y-middle">
+                        <div class="col-lg-6 pr-15 md-pr-15 md-mb-50">
+                            <div class="images-part">
+                                <img src="../../assets/images/img-event/detail/event1.jpeg" alt="Images">
+                            </div>
+                        </div>
+                        <div class="col-lg-6 pl-45 md-pl-15">
+                            <div class="sec-title">
+                                <span class="sub-text">Detail Event</span>
+                                <h2 class="title pb-22">
+                                    MENTAL HEALTH FOR STARTUP WORKERS
+                                </h2>
+                                <div class="heading-border-line left-style"></div>
+                                <p class="desc margin-0 pt-40 pb-25">
+                                    Pengusaha bisnis rintisan alias start-up umumnya memulai usaha untuk membuat sebuah produk yang didambakan. Lalu bagaimana menjaga MENTAL HEALTH FOR STARTUP WORKERS? Kita akan bahas bersama dengan kak @nahlianahal pada webinar yang akan diadakan pada: Hari, Tanggal: Jumat, 30 Juli 2021 Jam: 13:30 WIB- selesai ONLINE CLASS FROM HOME . Link: http://bit.ly/01juldp LINK ON INSTAGRAM @dilopadang BIO . Dapatkan E-Sertifkat dan Bonus Pulsa
+                                </p>
+                                <div class="rs-counter about-style">
+                                    <div class="row">
+                                       <div class="col-lg-6 md-mb-30">
+                                           <div class="counter-list">
+                                               <div class="counter-icon" style="margin-top: -15px;">
+                                                   <img src="../../assets/images/counter/icons/1.png" alt="Counter">
+                                               </div>
+                                               <div class="counter-text plus" style="margin-top: -30px;">
+                                                   <div class="rs-count">5</div>
+                                                   <h4 class="title">Speakers</h4>
+                                               </div>
+                                           </div>
+                                       </div> 
+                                       <div class="col-lg-6">
+                                        <div class="counter-list1">
+                                            <div class="counter-icon1" style="font-size: 40px; margin-left: 100px; margin-top: -20px; width: 50%;">
+                                                <ul class="social-info" style=" display: flex; justify-content: space-around; align-items: center;">
+                                                    <li style="display: block;"><a href="#"><i class="fa fa-facebook fa-10x"></i></a></li>
+                                                    <li style="display: block;"><a href="#"><i class="fa fa-twitter fa-10x"></i></a></li>
+                                                </ul>
+                                                <ul class="social-info1" style=" display: flex; justify-content: space-around;">
+                                                    <li style="display: block;"><a href="#"><i class="fa fa-instagram fa-10x"></i></a></li>
+                                                    <li style="display: block;"><a href="#"><i class="fa fa-youtube fa-10x"></i></a></li>
+                                                </ul>
+                                            </div>
+                                        </div>
+                                    </div>
+                                   </div>
+                               </div> 
+                               </div>
+                           <div class="btn-part" style="margin-top: -50px;">
+                                    <input type="checkbox" id="show">
+                                    <label for="show" class="readon btn-text ticket" style="margin-top: -10;">Daftar</label>
+                                    <div class="container1">
+                                        <label for="show" class="close-btn"><i class="bi bi-x-square"></i></label>
+                                        <h2 class="text-left">Daftar</h2>
+                                       <form action="">
+                                        <div class="data">
+                                            <label for="" >Email</label>
+                                            <input type="email" required>
+                                        </div>
+                                        <div class="data">
+                                            <label for="" >Nama Lengkap</label>
+                                            <input type="text" required>
+                                        </div>
+                                        <div class="data">
+                                            <label for="" >Kata Sandi</label>
+                                            <input type="password" required>
+                                        </div>
+                                        <div class="data">
+                                            <label for="" >Ulangi Kata Sandi</label>
+                                            <input type="password" required>
+                                        </div>
+                                        <div class="btn">
+                                            <div class="inner"></div>
+                                            <button class="submit" id="show-login">Daftar</button>
+                                        </div>
+                                        <div class="signup-link">Not a Member ? <a href="">Sign Up Now</a></div>
+                                       </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- About Section End -->
+
+            <!-- Services Section Start -->
+            <div class="rs-services style4 bg14 pt-120 pb-120 md-pt-80 md-pb-80" style="background-image: url('../../assets/images/bg.jpg');">
+                <div class="container">
+                    <div class="row y-middle">
+                        <div class="col-lg-6 md-mb-50">
+                            <div class="sec-title mb-60">
+                                <span class="sub-text">Join The Event</span>
+                                <h2 class="title pb-25">
+                                    Our Provided Perks For You<br>
+                                    During Conference
+                                </h2>
+                                <div class="heading-border-line left-style"></div>
+                            </div>
+                            <div class="row">
+                                <div class="col-lg-6">
+                                    <div class="services-item mb-45">
+                                        <div class="services-icon">
+                                            <img src="../../assets/images/img-event/detail/acci.png" alt="Images">
+                                        </div>
+                                        <div class="services-text">
+                                            <h3 class="title"><a href="services-style1.html">Event By</a></h3>
+                                            <p class="services-txt">Cimahi TechnoPark</p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-lg-6">
+                                    <div class="services-item mb-45">
+                                        <div class="services-icon">
+                                            <img src="../../assets/images/img-event/detail/icons8-micro-55.png" alt="Images">
+                                        </div>
+                                        <div class="services-text">
+                                            <h3 class="title"><a href="services-style1.html">Keynote Speakers</a></h3>
+                                            <p class="services-txt">DR. Agus Gumiwang Kartasasmita, M.Si.</p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-lg-6">
+                                    <div class="services-item mb-45">
+                                        <div class="services-icon">
+                                            <img src="../../assets/images/img-event/detail/calendar-55.ico" alt="Images">
+                                        </div>
+                                        <div class="services-text">
+                                            <h3 class="title"><a href="services-style1.html">Tanggal</a></h3>
+                                            <p class="services-txt">2020-12-31</p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-lg-6">
+                                    <div class="services-item mb-45">
+                                        <div class="services-icon">
+                                            <img src="../../assets/images/img-event/detail/clock-4-55.ico" alt="Images">
+                                        </div>
+                                        <div class="services-text">
+                                            <h3 class="title"><a href="services-style1.html">Waktu</a></h3>
+                                            <p class="services-txt">13:30 WIB - 17.30 WIB</p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-lg-6">
+                                    <div class="services-item mb-45">
+                                        <div class="services-icon">
+                                            <img src="../../assets/images/img-event/detail/icons8-ticket-55.png" alt="Images">
+                                        </div>
+                                        <div class="services-text">
+                                            <h3 class="title"><a href="services-style1.html">Tipe Event</a></h3>
+                                            <p class="services-txt">Free/Gratis</p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-lg-6">
+                                    <div class="services-item">
+                                        <div class="services-icon">
+                                            <img src="../../assets/images/img-event/detail/map-5-55.ico" alt="Images">
+                                        </div>
+                                        <div class="services-text">
+                                            <h3 class="title"><a href="services-style1.html">Tempat</a></h3>
+                                            <p class="services-txt">GOR Citra, jl Cikutra No.19</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-6 pl-50 md-pl-15">
+                            <div class="rs-videos choose-video">
+                                <div class="images-video">
+                                    <img src="../../assets/images/img-event/detail/event_vid.png" alt="video/mp4" style="box-shadow: rgba(17, 17, 26, 0.1) 0px 4px 16px, rgba(17, 17, 26, 0.1) 0px 8px 24px, rgba(17, 17, 26, 0.1) 0px 16px 56px;">
+                                </div>
+                                <div class="animate-border">
+                                    <a class="popup-border" href="https://www.youtube.com/watch?v=CxXmxRD3Gr0">
+                                        <i class="fa fa-play"></i>
+                                    </a>
+                                </div>
+                            </div>  
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- Services Section End -->
+
+            <!-- Team Section Start -->
+            <div class="rs-team style2 bg12 pt-120 pb-50 md-pt-80" style="background-image: url('https://rstheme.com/products/wordpress/evenio/wp-content/uploads/2021/11/bg4.jpg');">
+                <div class="container">
+                    <div class="sec-title text-center mb-60">
+                        <span class="sub-text">Speakers</span>
+                        <h2 class="title black-color pb-35">
+                            Event Speakers
+                        </h2>
+                        <div class="heading-border-line"></div>
+                    </div>
+                    <div class="">
+                        <div class="team-item">
+                            <div class="team-inner-wrap">
+                                <div class="images-wrap">
+                                    <a href="speaker-single.html"><img src="../../assets/images/img-event/detail/foto3.jpg" alt="Team" width="350"></a>
+                                </div>
+                                <div class="team-content">
+                                    <div class="rs-arrow">
+                                        <div class="curve"></div>
+                                        <div class="point"></div>
+                                    </div>
+                                    <h3 class="title-name"><a href="speaker-single.html" style="color: black;">DR. Agus Gumiwang Kartasasmita, M.Si.</a></h3>
+                                    <div class="team-title">Menteri Perindustrian Republik Indonesia</div>
+                                    <ul class="social-icons">
+                                       <li><a href="#"><i class="fa fa-facebook" style="color: black;"></i></a></li>
+                                       <li><a href="#"><i class="fa fa-instagram" style="color: black;"></i></a></li>
+                                       <li><a href="#"><i class="fa fa-twitter" style="color: black;"></i></a></li>
+                                       <li><a href="#"><i class="fa fa-linkedin" style="color: black;"></i></a></li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-3 col-md-6 md-mb-20">
+                            <div class="team-item">
+                                <div class="team-inner-wrap">
+                                    <div class="images-wrap">
+                                        <a href="speaker-single.html"><img src="../../assets/images/img-event/detail/foto5.jpg" alt="Team"></a>
+                                    </div>
+                                    <div class="team-content">
+                                        <div class="rs-arrow">
+                                            <div class="curve"></div>
+                                            <div class="point"></div>
+                                        </div>
+                                        <h3 class="title-name"><a href="speaker-single.html" style="color: black;">Taufik Bawazier</a></h3>
+                                        <div class="team-title">DIRJEN ILMATE</div>
+                                        <ul class="social-icons">
+                                            <li><a href="#"><i class="fa fa-facebook" style="color: black;"></i></a></li>
+                                            <li><a href="#"><i class="fa fa-instagram" style="color: black;"></i></a></li>
+                                            <li><a href="#"><i class="fa fa-twitter" style="color: black;"></i></a></li>
+                                            <li><a href="#"><i class="fa fa-linkedin" style="color: black;"></i></a></li>
+                                         </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-3 col-md-6 sm-mb-20">
+                            <div class="team-item">
+                                <div class="team-inner-wrap">
+                                    <div class="images-wrap">
+                                        <a href="speaker-single.html"><img src="../../assets/images/img-event/detail/foto1.jpg" alt="Team"></a>
+                                    </div>
+                                    <div class="team-content">
+                                        <div class="rs-arrow">
+                                            <div class="curve"></div>
+                                            <div class="point"></div>
+                                        </div>
+                                        <h3 class="title-name"><a href="speaker-single.html" style="color: black;">Ir.Akhari Abidin, M.Si</a></h3>
+                                        <div class="team-title">Asosiasi Piranti Lunak Telematika Indonesia</div>
+                                        <ul class="social-icons">
+                                            <li><a href="#"><i class="fa fa-facebook" style="color: black;"></i></a></li>
+                                            <li><a href="#"><i class="fa fa-instagram" style="color: black;"></i></a></li>
+                                            <li><a href="#"><i class="fa fa-twitter" style="color: black;"></i></a></li>
+                                            <li><a href="#"><i class="fa fa-linkedin" style="color: black;"></i></a></li>
+                                         </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-3 col-md-6">
+                            <div class="team-item">
+                                <div class="team-inner-wrap">
+                                    <div class="images-wrap">
+                                        <a href="speaker-single.html"><img src="../../assets/images/img-event/detail/foto6.jpg" alt="Team"></a>
+                                    </div>
+                                    <div class="team-content">
+                                        <div class="rs-arrow">
+                                            <div class="curve"></div>
+                                            <div class="point"></div>
+                                        </div>
+                                        <h3 class="title-name"><a href="speaker-single.html" style="color: black;">Ravindra Airlangga, MS</a></h3>
+                                        <div class="team-title">Anggota DPR RI</div>
+                                        <ul class="social-icons">
+                                            <li><a href="#"><i class="fa fa-facebook" style="color: black;"></i></a></li>
+                                            <li><a href="#"><i class="fa fa-instagram" style="color: black;"></i></a></li>
+                                            <li><a href="#"><i class="fa fa-twitter" style="color: black;"></i></a></li>
+                                            <li><a href="#"><i class="fa fa-linkedin" style="color: black;"></i></a></li>
+                                         </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-3 col-md-6">
+                            <div class="team-item">
+                                <div class="team-inner-wrap">
+                                    <div class="images-wrap">
+                                        <a href="speaker-single.html"><img src="../../assets/images/img-event/detail/foto4.jpg" alt="Team"></a>
+                                    </div>
+                                    <div class="team-content">
+                                        <div class="rs-arrow">
+                                            <div class="curve"></div>
+                                            <div class="point"></div>
+                                        </div>
+                                        <h3 class="title-name"><a href="speaker-single.html" style="color: black;">Dr. HJ. Umi Waheeda Binti H.Abdulrahman, S.Psi.,M. Si</a></h3>
+                                        <div class="team-title">Yayasan Al-Ashriyyah Nurul Iman</div>
+                                        <ul class="social-icons">
+                                            <li><a href="#"><i class="fa fa-facebook" style="color: black;"></i></a></li>
+                                            <li><a href="#"><i class="fa fa-instagram" style="color: black;"></i></a></li>
+                                            <li><a href="#"><i class="fa fa-twitter" style="color: black;"></i></a></li>
+                                            <li><a href="#"><i class="fa fa-linkedin" style="color: black;"></i></a></li>
+                                         </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- Team Section Start -->
+
+            <!-- Our Sponsor Section Start -->
+            <div id="assosiasi" class="rs-partner sponsors-style pt-110 pb-110 md-pt-70 md-pb-0" style="background-image: url('https://rstheme.com/products/wordpress/evenio/wp-content/uploads/2021/11/bg11.jpg');">
+                <div class="container">
+                    <div class="sec-title text-center mb-65">
+                        <span class="sub-text small">Our Sponsor</span>
+                        <h2 class="title pb-35">
+                            Supported By
+                        </h2>
+                        <div class="heading-border-line"></div>
+                    </div>
+                    <div class="row no-gutters">
+                        <div class="col-lg-3 col-md-6 col-sm-6 col-6" data-aos="zoom-in" data-aos-delay="100" style="box-shadow: rgba(0, 0, 0, 0.15) 1.95px 1.95px 2.6px;"> 
+                            <div class="grid-figure">
+                                <div class="log-img">
+                                    <a href="https://reactheme.com"><img src="../../assets/images/img-sponsor/ainaki.png" alt="images"></a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-3 col-md-6 col-sm-6 col-6" data-aos="zoom-in" data-aos-delay="200" style="box-shadow: rgba(0, 0, 0, 0.15) 1.95px 1.95px 2.6px;">
+                            <div class="grid-figure">
+                                <div class="log-img">
+                                    <a href="https://reactheme.com"><img src="../../assets/images/img-sponsor/agi.png" alt="images"></a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-3 col-md-6 col-sm-6 col-6" data-aos="zoom-in" data-aos-delay="300" style="box-shadow: rgba(0, 0, 0, 0.15) 1.95px 1.95px 2.6px;">
+                            <div class="grid-figure">
+                                <div class="log-img">
+                                    <a href="https://reactheme.com"><img src="../../assets/images/img-sponsor/aspiluki.png" alt="images"></a>
+                                </div>
+                            </div>
+                        </div>  
+                        <div class="col-lg-3 col-md-6 col-sm-6 col-6" data-aos="zoom-in" data-aos-delay="300" style="box-shadow: rgba(0, 0, 0, 0.15) 1.95px 1.95px 2.6px;">
+                            <div class="grid-figure border-no">
+                                <div class="log-img">
+                                    <a href="https://reactheme.com"><img src="../../assets/images/img-sponsor/rice.png" alt="images"></a>
+                                </div>
+                            </div>
+                        </div>  
+                        <div class="col-lg-3 col-md-6 col-sm-6 col-6" data-aos="zoom-in" data-aos-delay="400" style="box-shadow: rgba(0, 0, 0, 0.15) 1.95px 1.95px 2.6px;">
+                            <div class="grid-figure">
+                                <div class="log-img">
+                                    <a href="https://reactheme.com"><img src="../../assets/images/img-sponsor/iot.png" alt="images"></a>
+                                </div>
+                            </div>
+                        </div>  
+                        <div class="col-lg-3 col-md-6 col-sm-6 col-6" data-aos="zoom-in" data-aos-delay="500" style="box-shadow: rgba(0, 0, 0, 0.15) 1.95px 1.95px 2.6px;">
+                            <div class="grid-figure">
+                                <div class="log-img">
+                                    <a href="https://reactheme.com"><img src="../../assets/images/img-sponsor/btp.png" alt="images"></a>
+                                </div>
+                            </div>
+                        </div>  <div class="col-lg-3 col-md-6 col-sm-6 col-6" data-aos="zoom-in" data-aos-delay="600" style="box-shadow: rgba(0, 0, 0, 0.15) 1.95px 1.95px 2.6px;">
+                            <div class="grid-figure">
+                                <div class="log-img">
+                                    <a href="https://reactheme.com"><img src="../../assets/images/img-sponsor/bdi.png" alt="images"></a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-3 col-md-6 col-sm-6 col-6" data-aos="zoom-in" data-aos-delay="700" style="box-shadow: rgba(0, 0, 0, 0.15) 1.95px 1.95px 2.6px;">
+                            <div class="grid-figure border-no">
+                                <div class="log-img">
+                                    <a href="https://reactheme.com"><img src="../../assets/images/img-sponsor/semarang.png" alt="images"></a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-3 col-md-6 col-sm-6 col-6" style="visibility: hidden;">
+                            <div class="grid-figure bottom-noborder">
+                                <div class="log-img">
+                                    <a href="https://reactheme.com"><img src="../../assets/images/partner/img-sponsor/9.png" alt="images"></a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-3 col-md-6 col-sm-6 col-6" data-aos="zoom-in" data-aos-delay="800" style="box-shadow: rgba(0, 0, 0, 0.15) 1.95px 1.95px 2.6px;">
+                            <div class="grid-figure bottom-noborder">
+                                <div class="log-img">
+                                    <a href="https://reactheme.com"><img src="../../assets/images/img-sponsor/makasar.png" alt="images"></a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-3 col-md-6 col-sm-6 col-6" data-aos="zoom-in" data-aos-delay="900" style="box-shadow: rgba(0, 0, 0, 0.15) 1.95px 1.95px 2.6px;">
+                            <div class="grid-figure bottom-noborder">
+                                <div class="log-img">
+                                    <a href="https://reactheme.com"><img src="../../assets/images/partner/sponsor/11.png" alt="images"></a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-3 col-md-6 col-sm-6 col-6" style="visibility: hidden;">
+                            <div class="grid-figure border-no bottom-noborder">
+                                <div class="log-img">
+                                    <a href="https://reactheme.com"><img src="../../assets/images/partner/img-sponsor/12.png" alt="images"></a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- Our Sponsor Section Start -->
+        </div> 
+        <!-- Main content End -->
+        <div class="rs-newsletter style1 pt-120 md-pt-80 mb--110">
+            <div class="container">
+                <div class="newsletter-wrap">
+                    <div class="row y-middle">
+                        <div class="col-lg-6 md-mb-30">
+                            <div class="content-wrap">
+                                <div class="icon-img">
+                                    <img src="../../assets/images/mail.png" alt="images">
+                                </div>
+                                <h3 class="newsletter-title">
+                                    Newsletter Subscribe
+                                </h3>
+                            </div>
+                        </div>
+                        <div class="col-lg-6">
+                            <form class="newsletter-form">
+                                <input type="email" name="email" placeholder="Your email address" required="">
+                                <em class="paper-plane"><input type="submit" value="Subscribe"></em>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Footer Start -->
+        <footer id="rs-footer" class="rs-footer style1" style="background-image: url('https://rstheme.com/products/wordpress/evenio/wp-content/uploads/2021/09/footer-bg-5.jpg');">
+            <div class="footer-top">
+                <div class="container" id="fotter">
+                    <div class="row">
+                        <div class="col-lg-4 col-md-12 col-sm-12 md-mb-10">
+                            <div class="footer-logo mb-40">
+                                <a href="index.html"><img src="assets/images/logo-light2.png" alt=""></a>
+                            </div>
+                        </div>
+                        <div class="col-lg-8">
+                            <div class="row">
+                                <div class="col-lg-4 col-md-12 col-sm-12 pl-45 md-pl-15">
+                                    <h3 class="footer-title">Address</h3>
+                                    <div class="textwidget">jalan gatot subroto kav 52-53 Lantai 11 - Jakarta Selatan, DKI Jakarta, Indonesia</div>
+                                </div>
+                                <div class="col-lg-4 col-md-12 col-sm-12 md-mb-10 pl-90 md-pl-15">
+                                    <h3 class="footer-title">Call Us</h3>
+                                    <div class="textwidget">
+                                        <a href="mailto:support@reactheme.com">Email : virtualtechnopark@gmail.com </a><br>
+                                        <a href="tel:(+880)155-69569">Info : virtualtechnopark.id</a>
+                                    </div>
+                                </div>
+                                <div class="col-lg-4 col-md-12 col-sm-12 pl-115 md-pl-15">
+                                    <h3 class="footer-title">Follow Us</h3>
+                                    <ul class="footer-social">  
+                                        <li> 
+                                            <a href="#"><i class="fa fa-facebook"></i></a>
+                                        </li>
+                                        <li> 
+                                            <a href="#"><i class="fa fa-twitter"></i></a> 
+                                        </li>
+
+                                        <li> 
+                                            <a href="#"><i class="fa fa-linkedin"></i></a>
+                                        </li>
+
+                                        <li> 
+                                            <a href="#"><i class="fa fa-instagram"></i></a>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <div class="container">                    
+                    <div class="row y-middle">
+                        <div class="col-lg-6 md-mb-10 text-lg-end text-center order-last">
+                            <ul class="copy-right-menu">
+                                <li><a href="index.html">Home</a></li>
+                                <li><a href="about.html">About</a></li>
+                                <li><a href="schedule.html">Schedule</a></li>
+                            </ul>
+                        </div>
+                        <div class="col-lg-6">
+                            <div class="copyright text-lg-start text-center ">
+                                <p>@2022 Virtual Technopark, Industri Elektronika & Telematika - Dirjen ILMATE Kementerian Perindustrian, Development by Subdit Software dan Konten</a></p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </footer>
+        <!-- Footer End -->
+
+        <!-- start scrollUp  -->
+        <div id="scrollUp" class="orange-color">
+            <i class="fa fa-angle-up"></i>
+        </div>
+        <!-- End scrollUp  -->
+
+        <!-- Search Modal Start -->
+        <div class="modal fade search-modal" id="searchModal" tabindex="-1">
+            <button type="button" class="close" data-bs-dismiss="modal">
+                <span class="flaticon-cross"></span>
+            </button>
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content">
+                    <div class="search-block clearfix">
+                        <form>
+                            <div class="form-group">
+                                <input class="form-control" placeholder="Search Here..." type="text">
+                                <button type="submit" value="Search"><i class="flaticon-search"></i></button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Search Modal End -->
+        <!-- modernizr js -->
+        <script src="../../assets/js/modernizr-2.8.3.min.js"></script>
+        <!-- jquery latest version -->
+        <script src="../../assets/js/jquery.min.js"></script>
+        <!-- Bootstrap v4.4.1 js -->
+        <script src="../../assets/js/bootstrap.min.js"></script>
+        <!-- op nav js -->
+        <script src="../../assets/js/jquery.nav.js"></script>
+        <!-- isotope.pkgd.min js -->
+        <script src="../../assets/js/isotope.pkgd.min.js"></script>
+        <!-- owl.carousel js -->
+        <script src="../../assets/js/owl.carousel.min.js"></script>
+        <!-- wow js -->
+        <script src="../../assets/js/wow.min.js"></script>
+        <!-- Time Circle js -->
+        <script src="../../assets/js/time-circle.js"></script>
+        <!-- Skill bar js -->
+        <script src="../../assets/js/skill.bars.jquery.js"></script>
+        <!-- imagesloaded js -->
+        <script src="../../assets/js/imagesloaded.pkgd.min.js"></script>
+         <!-- waypoints.min js -->
+        <script src="../../assets/js/waypoints.min.js"></script>
+        <!-- counterup.min js -->
+        <script src="../../assets/js/jquery.counterup.min.js"></script> 
+        <!-- magnific popup js -->
+        <script src="../../assets/js/jquery.magnific-popup.min.js"></script>
+        <!-- contact form js -->
+        <script src="../../assets/js/contact.form.js"></script>
+        <!-- main js -->
+        <script src="../../assets/js/main.js"></script>
+    </body>
+</html>

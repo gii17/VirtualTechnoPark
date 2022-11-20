@@ -1,0 +1,782 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Untitled 7</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <meta name="viewport" content="user-scalable=no, initial-scale=0.5, width=device-width, viewport-fit=cover" />
+    <link rel="preload" href="script.js?v=1664857810932" as="script"/>
+<link rel="preload" href="media/panorama_ABC5FAF3_A0AB_97C6_41C5_41EE9F1D6B4B_0/f/5/0_0.jpg?v=1664857810932" as="image"/>
+<script>(function(i,s,o,g,r,a,m){i["GoogleAnalyticsObject"]=r;i[r]=i[r]||function(){(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)})(window,document,"script","//www.google-analytics.com/analytics.js","ga");ga("create", "UA-116087-3", "auto"); ga("send", "pageview");</script>
+<meta name="description" content="Virtual Tour"/>
+<meta name="theme-color" content="#FFFFFF"/>
+
+<link rel="shortcut icon" type="image/x-icon" href="../assets/images/fav.png">
+<!-- Bootstrap v4.4.1 css -->
+<link rel="stylesheet" type="text/css" href="../assets/css/bootstrap.min.css">
+<!-- font-awesome css -->
+<link rel="stylesheet" type="text/css" href="../assets/css/font-awesome.min.css">
+<!-- flaticon css -->
+<link rel="stylesheet" type="text/css" href="../assets/fonts/flaticon.css">
+<!-- animate css -->
+<link rel="stylesheet" type="text/css" href="../assets/css/animate.css">
+<!-- owl.carousel css -->
+<link rel="stylesheet" type="text/css" href="../assets/css/owl.carousel.css">
+<!-- off canvas css -->
+<link rel="stylesheet" type="text/css" href="../assets/css/off-canvas.css">
+<!-- magnific popup css -->
+<link rel="stylesheet" type="text/css" href="../assets/css/magnific-popup.css">
+<!-- Main Menu css -->
+<link rel="stylesheet" href="../assets/css/rsmenu-main.css">
+<!-- spacing css -->
+<link rel="stylesheet" type="text/css" href="../assets/css/rs-spacing.css">
+
+<link rel="stylesheet" href="../style.css">
+<link rel="stylesheet" type="text/css" href="../assets/css/responsive.css">
+    <script src="lib/tdvplayer.js?v=1664857810932"></script>
+    <script type="text/javascript">
+        var player;
+        var playersPlayingTmp = [];
+        var isInitialized = false;
+        var isPaused = false;
+
+        function loadTour()
+        {
+            if(player)
+                return;
+
+            var beginFunc = function(event){
+                if(event.name == 'begin')
+                {
+                    var camera = event.data.source.get('camera');
+                    if(camera && camera.get('initialSequence') && camera.get('initialSequence').get('movements').length > 0)
+                        return;
+                }
+
+                if(event.sourceClassName == "MediaAudio")
+                    return;
+
+                isInitialized = true;
+
+                player.unbind('preloadMediaShow', beginFunc, player, true);
+                player.unbindOnObjectsOf('PanoramaPlayListItem', 'begin', beginFunc, player, true);
+                player.unbind('stateChange', beginFunc, player, true);
+                window.parent.postMessage("tourLoaded", '*');
+
+                disposePreloader();
+
+                onVirtualTourLoaded();
+            };
+
+            var settings = new TDV.PlayerSettings();
+            
+            settings.set(TDV.PlayerSettings.CONTAINER, document.getElementById('viewer'));
+            settings.set(TDV.PlayerSettings.SCRIPT_URL, 'script.js?v=1664857810932');
+            settings.set(TDV.PlayerSettings.WEBVR_POLYFILL_URL, 'lib/WebVRPolyfill.js?v=1664857810932');
+            settings.set(TDV.PlayerSettings.HLS_URL, 'lib/Hls.js?v=1664857810932');
+            settings.set(TDV.PlayerSettings.QUERY_STRING_PARAMETERS, 'v=1664857810932');
+            window.tdvplayer = player = TDV.PlayerAPI.create(settings);
+            player.bind('preloadMediaShow', beginFunc, player, true);
+            player.bind('stateChange', beginFunc, player, true);
+            player.bindOnObjectsOf('PanoramaPlayListItem', 'begin', beginFunc, player, true);
+            player.bindOnObject('rootPlayer', 'start', function(e){
+                var queryDict = {}; location.search.substr(1).split("&").forEach(function(item) {var k = item.split("=")[0], v = decodeURIComponent(item.split("=")[1]);queryDict[k] = v});
+                var item = undefined;
+                if("media-index" in queryDict){
+                    item = setMediaByIndex(parseInt(queryDict["media-index"]) - 1);
+                }
+                else if("media-name" in queryDict){
+                    item = setMediaByName(queryDict["media-name"]);
+                }
+                else{
+                    item = setMediaByIndex(0);
+                }
+                if(item != undefined && "trigger-overlay-name" in queryDict){
+                    triggerOverlayByName(item, queryDict["trigger-overlay-name"], "trigger-overlay-event" in queryDict ? queryDict["trigger-overlay-event"] : "click");
+                }
+
+                player.getById('rootPlayer').bind('tourEnded', function(){
+                    onVirtualTourEnded();
+                }, player, true);
+            }, player, false);
+
+            /* Listen messages */
+            window.addEventListener('message', function (e) {
+                //Listen to messages for make actions to player in the format function:param1,param2
+                var action = e.data;
+                if (action == 'pauseTour' || action == 'resumeTour') {
+                    this[action].apply(this);
+                }
+            });
+        }
+
+        function pauseTour()
+        {
+            isPaused = true;
+            if(!isInitialized)
+                return;
+
+            var playLists = player.getByClassName('PlayList');
+            for(var i = 0, count = playLists.length; i<count; i++)
+            {
+                var playList = playLists[i];
+                var index = playList.get('selectedIndex');
+                if(index != -1)
+                {
+                    var item = playList.get('items')[index];
+                    var itemPlayer = item.get('player');
+                    if(itemPlayer && itemPlayer.pause)
+                    {
+                        playersPlayingTmp.push(itemPlayer);
+                        itemPlayer.pause();
+                    }
+                }
+            }
+
+            player.getById('pauseGlobalAudios')();
+        }
+
+        function resumeTour()
+        {
+            isPaused = false;
+            if(!isInitialized)
+                return;
+
+            while(playersPlayingTmp.length)
+            {
+                var viewer = playersPlayingTmp.pop();
+                viewer.play();
+            }
+
+            player.getById('resumeGlobalAudios')();
+        }
+
+        function onVirtualTourLoaded()
+        {
+            if(isPaused)
+                pauseTour();
+        }
+
+        function onVirtualTourEnded()
+        {
+
+        }
+
+        function getRootPlayer()
+        {
+            return window.tdvplayer !== undefined ? window.tdvplayer.getById('rootPlayer') : undefined;
+        }
+
+        function setMediaByIndex(index)
+        {
+            var rootPlayer = getRootPlayer();
+            if(rootPlayer !== undefined) {
+                return rootPlayer.setMainMediaByIndex(index);
+            }
+        }
+
+        function setMediaByName(name)
+        {
+            var rootPlayer = getRootPlayer();
+            if(rootPlayer !== undefined) {
+                return rootPlayer.setMainMediaByName(name);
+            }
+        }
+
+        function triggerOverlayByName(item, name, eventName)
+        {
+            var rootPlayer = getRootPlayer();
+            if(rootPlayer !== undefined) {
+                item.bind('begin', function(e){
+                    item.unbind('begin', arguments.callee, this);
+                    var overlay = rootPlayer.getPanoramaOverlayByName(item.get('media'), name);
+                    if(overlay)
+                        rootPlayer.triggerOverlay(overlay, eventName);
+                }, rootPlayer);
+            }
+        }
+
+        function showPreloader()
+        {
+            var preloadContainer = document.getElementById('preloadContainer');
+            if(preloadContainer != undefined)
+                preloadContainer.style.opacity = 1;
+        }
+
+        function disposePreloader()
+        {
+            var preloadContainer = document.getElementById('preloadContainer');
+            if(preloadContainer == undefined)
+                return;
+
+            var transitionEndName = transitionEndEventName();
+            if(transitionEndName)
+            {
+                preloadContainer.addEventListener(transitionEndName, hide, false);
+                preloadContainer.style.opacity = 0;
+                setTimeout(hide, 500); //Force hide. Some cases the transitionend event isn't dispatched with an iFrame.
+            }
+            else
+            {
+                hide();
+            }
+
+            function hide()
+            {
+                
+                preloadContainer.style.visibility = 'hidden';
+                preloadContainer.style.display = 'none';
+            }
+
+            function transitionEndEventName () {
+                var el = document.createElement('div');
+                var transitions = {
+                        'transition':'transitionend',
+                        'OTransition':'otransitionend',
+                        'MozTransition':'transitionend',
+                        'WebkitTransition':'webkitTransitionEnd'
+                    };
+
+                var t;
+                for (t in transitions) {
+                    if (el.style[t] !== undefined) {
+                        return transitions[t];
+                    }
+                }
+
+                return undefined;
+            }
+        }
+
+        function onBodyClick(){
+            document.body.removeEventListener("click", onBodyClick);
+            document.body.removeEventListener("touchend", onBodyClick);
+            loadTour();
+        }
+
+        function onLoad() {
+            if (/AppleWebKit/.test(navigator.userAgent) && /Mobile\/\w+/.test(navigator.userAgent))
+            {
+                var inIFrame = false;
+                try
+                {
+                    inIFrame = (window.self !== window.top);
+                }
+                catch (e)
+                {
+                    inIFrame = true;
+                }
+                if (!inIFrame)
+                {
+                    var onResize = function(async)
+                    {
+                        [0, 250, 1000, 2000].forEach(function(delay)
+                        {
+                            setTimeout(function()
+                            {
+                                var viewer = document.querySelector('#viewer');
+                                var scale = window.innerWidth / document.documentElement.clientWidth;
+                                var width = document.documentElement.clientWidth;
+                                var height = Math.round(window.innerHeight / scale);
+                                viewer.style.width = width + 'px';
+                                viewer.style.height = height + 'px';
+                                viewer.style.left = Math.round((window.innerWidth - width) * 0.5) + 'px';
+                                viewer.style.top = Math.round((window.innerHeight - height) * 0.5) + 'px';
+                                viewer.style.transform = 'scale(' + scale + ', ' + scale + ')';
+                                window.scrollTo(0,0);
+                            }, delay);
+                        });
+                    };
+                    window.addEventListener('resize', onResize);
+                    onResize();
+                }
+            }
+
+
+            if (isOVRWeb()){
+                showPreloader();
+                loadTour();
+                return;
+            }
+
+            showPreloader();
+loadTour()
+        }
+
+        function playVideo(video) {
+            function isSafariDesktopV11orGreater() {
+                return /^((?!chrome|android|crios|ipad|iphone).)*safari/i.test(navigator.userAgent) && parseFloat(/Version\/([0-9]+\.[0-9]+)/i.exec(navigator.userAgent)[1]) >= 11;
+            }
+
+            function detectUserAction() {
+                var onVideoClick = function(e) {
+                    if(video.paused) {
+                        video.play();
+                    }
+                    video.muted = false;
+                    e.stopPropagation();
+                    e.stopImmediatePropagation();
+                    e.preventDefault();
+                    video.removeEventListener('click', onVideoClick);
+                    video.removeEventListener('touchend', onVideoClick);
+                };
+                video.addEventListener("click", onVideoClick);
+                video.addEventListener("touchend", onVideoClick);
+            }
+
+            if (isSafariDesktopV11orGreater()) {
+                video.muted = true;
+                video.play();
+            } else {
+                var canPlay = true;
+                var promise = video.play();
+                if (promise) {
+                    promise.catch(function() {
+                        video.muted = true;
+                        video.play();
+                        detectUserAction();
+                    });
+                } else {
+                    canPlay = false;
+                }
+
+                if (!canPlay || video.muted) {
+                    detectUserAction();
+                }
+            }
+        }
+
+        function isOVRWeb(){
+            return window.location.hash.substring(1).split('&').indexOf('ovrweb') > -1;
+        }
+    </script>
+    <style type="text/css">
+        html, body { width: 100%; height: 100%; margin: 0; padding: 0; padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left); }
+
+        #viewer { background-color: #FFFFFF; z-index:1; position:absolute; width: 100%; height: 100%; top: 0; }
+        #preloadContainer { z-index:2; position:relative; width:100%; height:100%; transition: opacity 0.5s; -webkit-transition: opacity 0.5s; -moz-transition: opacity 0.5s; -o-transition: opacity 0.5s;}
+    </style>
+    
+</head>
+<body  onload="onLoad()" style="margin-top: -50px;z-index: 8;">   
+   
+    <div id="preloadContainer" style="background-color:rgba(255,255,255,1)"><div style="z-index: 4; position: absolute; left: 0%; top: 50%; width: 100.00%; height: 10.00%"><div style="text-align:left; color:#000; "><DIV STYLE="text-align:center;"><SPAN STYLE="letter-spacing:0vmin;color:#777777;font-size:1.48vmin;font-family:Arial, Helvetica, sans-serif;">Loading virtual tour. Please wait...</SPAN></DIV><p STYLE="margin:0; line-height:1.11vmin;"><BR STYLE="letter-spacing:0vmin;color:#000000;font-size:1.11vmin;font-family:Arial, Helvetica, sans-serif;"/></p></div></div></div>
+<div id="viewer" style="margin-top: 85px;"></div>
+
+<!-- iframe Nav -->
+<div style="position:absolute; height:0; padding-top:3%;z-index: 8;width: 100%;">
+    <div class="full-width-header"  style="border-color: white;">
+        <!--Header Start-->
+        <header id="rs-header" class="rs-header header-style2">
+            <!-- Menu Start -->
+            <div class="menu-area menu-sticky" style="box-shadow: rgba(50, 50, 93, 0.25) 0px 2px 5px -1px, rgba(0, 0, 0, 0.3) 0px 1px 3px -1px;">
+                <div class="container">
+                    <div class="row-table">
+                        <div class="col-cell header-logo">                                  
+                            <div class="logo-area">
+                                <a href="../index.html">
+                                    <img class="normal-logo" src="../assets/images/logo-light.png" alt="logo" style="z-index: 99;">  
+                                    <img class="sticky-logo" src="../assets/images/logo-light.png" alt="logo2">
+                                </a>
+                            </div>
+                        </div>
+                        <div class="col-cell">
+                            <div class="rs-menu-area">
+                                <div class="main-menu">
+                                    <nav class="rs-menu hidden-md">
+                                        <ul class="nav-menu">
+                                            <li>
+                                                <a href="../index.html" style="color: #000;">Home</a>
+                                            </li>
+
+
+                                            <!-- <li class="menu-item-has-children current-menu-item">
+                                                <a href="index.html">Home</a>
+                                                <ul class="sub-menu">
+                                                    <li class="menu-item-has-children current-menu-item">
+                                                        <a href="#">Multipages</a>
+                                                        <ul class="sub-menu">
+                                                            <li><a href="index.html">Home One</a></li>
+                                                            <li class="active"><a href="index2.html">Home Two</a></li>
+                                                            <li><a href="index3.html">Home Three</a></li>
+                                                            <li><a href="index4.html">Home Four</a></li>
+                                                            <li><a href="index5.html">Home Five</a></li>
+                                                            <li><a href="index6.html">Home Six</a></li>
+                                                        </ul> 
+                                                    </li>
+                                                    <li class="menu-item-has-children">
+                                                        <a href="#">Onepages</a>
+                                                        <ul class="sub-menu">
+                                                            <li><a href="onepage1.html">Onepage One</a></li>
+                                                            <li><a href="onepage2.html">Onepage Two</a></li>
+                                                            <li><a href="onepage3.html">Onepage Three</a></li>
+                                                            <li><a href="onepage4.html">Onepage Four</a></li>
+                                                        </ul>  
+                                                    </li>
+                                                </ul>
+                                            </li> -->
+                                            <li class="menu-item-has-children">
+                                                <a href="#" style="color: #000;">Menu Page</a>
+                                                <ul class="sub-menu">
+                                                    <li><a href="../#join">Join Technopark</a></li>
+                                                    <li><a href="../#counter">Member & Startup</a></li>
+                                                    <li><a href="../#why">Why Technopark</a></li>
+                                                    <li><a href="../#berita">News</a></li>
+                                                    <li><a href="../#event">Event & Program</a></li>
+                                                    <li><a href="../#app">Produk Apps & Software</a></li>
+                                                    <li><a href="../#industri">Supported Industry</a></li>
+                                                    <li><a href="../#assosiasi">Supported Assosiasi</a></li>
+                                                    <li><a href="../#fotter">Contact</a></li>
+                                                </ul>
+                                            </li>
+
+                                            <li class="menu-item-has-children">
+                                                <a href="#" style="color: #000;">Menu</a>
+                                                <ul class="sub-menu">
+                                                    <li><a href="../page/event/event.html">Event Program</a></li>
+                                                    <li><a href="../page/app/app.html">Produk Apps & Software</a></li>
+                                                    <li><a href="../page/faq/faqs.html#">FAQ</a></li>
+                                                </ul>
+                                            </li>
+
+                                           
+
+                                            <!-- <li class="menu-item-has-children">
+                                                <a href="#">Speakers</a>
+                                                <ul class="sub-menu">
+                                                    <li><a href="speaker1.html">Speaker One</a></li>
+                                                    <li><a href="speaker2.html">Speaker Two</a></li>
+                                                    <li><a href="speaker3.html">Speaker Three</a></li>
+                                                    <li><a href="speaker4.html">Speaker Four</a></li>
+                                                    <li><a href="speaker5.html">Speaker Five</a></li>
+                                                    <li><a href="speaker-single.html">Speaker Single</a></li>
+                                                </ul>
+                                            </li> -->
+
+                                            <!-- <li class="menu-item-has-children">
+                                                <a href="#">Pages</a>                                                        
+                                                <ul class="sub-menu">                                      
+                                                    <li class="last-item menu-item-has-children">
+                                                        <a href="#">Schedule</a>
+                                                        <ul class="sub-menu">
+                                                            <li><a href="schedule-light.html">Schedule Light</a> </li>
+                                                            <li><a href="Schedule-dark.html">Schedule Dark</a></li>
+                                                        </ul>
+                                                    </li>
+                                                    <li><a href="gallery.html">Gallery</a></li>
+                                                    <li><a href="pricing-plan.html">Pricing Plan</a></li>
+                                                    <li><a href="faqs.html">Faqs</a></li>
+                                                    <li><a href="Sponsors.html">Sponsors</a></li>
+                                                </ul>
+                                            </li> -->
+
+                                            <li>
+                                                <a href="../page/member/member_all.html" style="color: #000;">Member</a>
+                                            </li>
+                                            <li>
+                                                <a href="../page/blog/blog.html" style="color: #000;">Blog</a>
+                                            </li>
+
+                                            <li class="menu-item-has-children">
+                                                <a href="../page/tentang_kami/contact.html" style="color: #000;">Tentang Kami</a>
+                                                <ul class="sub-menu">
+                                                    <li><a href="../page/tentang_kami/gallery/c1-gallery.html">Gallery</a></li>
+                                                    <li><a href="../page/tentang_kami/roadmap.html">Road Map</a></li>
+                                                    <li><a href="../page/tentang_kami/about.html">Tentang Kami</a></li>
+                                                    <li><a href="../page/tentang_kami/contact.html">Kontak</a></li>
+
+                                                </ul>
+                                            </li>
+
+
+
+                                        </ul> <!-- //.nav-menu -->
+                                    </nav>
+                                </div> <!-- //.main-menu -->
+                            </div>
+                        </div>
+  
+                    </div>
+                </div>
+            </div>
+            <!-- Menu End -->
+            <nav class="right_menu_togle menu-wrap-off  hidden-md">
+                <div class="close-btn">
+                    <a id="nav-close" class="nav-close">
+                        <div class="line">
+                            <span class="line1"></span>
+                            <span class="line2"></span>
+                        </div>
+                    </a>
+                </div>
+                <div class="rs-offcanvas-inner">
+                    <div class="canvas-logo">
+                        <a href="index.html"><img src="assets/images/logo-light.png" alt="logo"></a>
+                    </div>
+                    <div class="offcanvas-text">
+                        <p>Virtual Technopark mempunyai Visi untuk menyediakan lahan seluas-luasnya untuk Technopark eksisting guna mempromosikan solusi dan kegiatannya & untuk para startup / industri kreatif yang ternaungi dalamnya. Sehingga terjadi kolaborasi antara pelaku didalam virtual technopark</p>
+                    </div>
+                    <div class="canvas-contact">
+                        <div class="address-area">
+                            <div class="address-list">
+                                <div class="info-icon">
+                                    <i class="flaticon-location"></i>
+                                </div>
+                                <div class="info-content">
+                                    <h4 class="title">Address</h4>
+                                    <em>Gatot Subroto Kav.52-53 Jakarta Selatan</em>
+                                </div>
+                            </div>
+                            <div class="address-list">
+                                <div class="info-icon">
+                                    <i class="flaticon-email"></i>
+                                </div>
+                                <div class="info-content">
+                                    <h4 class="title">Email</h4>
+                                    <em><a href="mailto:support@reactheme.com">virtualtechnopark@gmail.com</a></em>
+                                </div>
+                             </div>
+                            <div class="address-list">
+                                <div class="info-icon">
+                                  <i class="flaticon-call"></i>
+                                </div>
+                                <div class="info-content">
+                                  <h4 class="title">Phone</h4>
+                                  <em>+019988772</em>
+                                </div>
+                            </div>
+                        </div>
+                        <ul class="social">
+                            <li><a href="#"><i class="fa fa-facebook"></i></a></li>
+                            <li><a href="#"><i class="fa fa-twitter"></i></a></li>
+                            <li><a href="#"><i class="fa fa-pinterest-p"></i></a></li>
+                            <li><a href="#"><i class="fa fa-instagram"></i></a></li>
+                        </ul><br/>
+
+                        <div class="btn-part wow fadeinup new">
+                            <a class="readon btn-text ticket2" href="login.html">
+                        <span> Login Account </span>
+
+                    </a>
+                </div>
+                    </div>
+                </div>
+            </nav>
+
+            <!-- Canvas Menu start -->
+      
+            <!-- Canvas Menu end -->
+
+            <!-- Canvas Mobile Menu start -->
+            <nav class="right_menu_togle mobile-navbar-menu" id="mobile-navbar-menu">
+                <div class="close-btn">
+                    <a id="nav-close2" class="nav-close">
+                        <div class="line">
+                            <span class="line1"></span>
+                            <span class="line2"></span>
+                        </div>
+                    </a>
+                </div>
+                <ul class="nav-menu">
+                    <li class="menu-item-has-children current-menu-item">
+                        <a href="index.html">Home</a>
+                        <ul class="sub-menu">
+                            <li class="menu-item-has-children current-menu-item">
+                                <a href="#">Multipages</a>
+                                <ul class="sub-menu">
+                                    <li class="active"><a href="index.html">Home One</a></li>
+                                    <li><a href="index2.html">Home Two</a></li>
+                                    <li><a href="index3.html">Home Three</a></li>
+                                    <li><a href="index4.html">Home Four</a></li>
+                                    <li><a href="index5.html">Home Five</a></li>
+                                </ul> 
+                            </li>
+                            <li class="menu-item-has-children">
+                                <a href="#">Onepages</a>
+                                <ul class="sub-menu">
+                                    <li><a href="onepage1.html">Onepage One</a></li>
+                                    <li><a href="onepage2.html">Onepage Two</a></li>
+                                    <li><a href="onepage3.html">Onepage Three</a></li>
+                                </ul>  
+                            </li>
+                        </ul>
+                    </li>
+                    <li>
+                        <a href="about.html">about</a>
+                    </li>
+                    <li class="menu-item-has-children">
+                        <a href="#">Speakers</a>
+                        <ul class="sub-menu">
+                            <li><a href="speaker1.html">Speaker One</a></li>
+                            <li><a href="speaker2.html">Speaker Two</a></li>
+                            <li><a href="speaker3.html">Speaker Three</a></li>
+                            <li><a href="speaker4.html">Speaker Four</a></li>
+                            <li><a href="speaker5.html">Speaker Five</a></li>
+                            <li><a href="speaker-single.html">Speaker Single</a></li>
+                        </ul>
+                    </li>
+                    <li class="menu-item-has-children">
+                        <a href="#">Pages</a>                                                        
+                        <ul class="sub-menu">                                                          
+                            <li class="last-item menu-item-has-children">
+                                <a href="#">Schedule</a>
+                                <ul class="sub-menu">
+                                    <li><a href="schedule-light.html">Schedule Light</a> </li>
+                                    <li><a href="Schedule-dark.html">Schedule Dark</a></li>
+                                </ul>
+                            </li>
+                            <li><a href="gallery.html">Gallery</a></li>
+                            <li><a href="pricing-plan.html">Pricing Plan</a></li>
+                            <li><a href="faqs.html">Faqs</a></li>
+                            <li><a href="Sponsors.html">Sponsors</a></li>
+                        </ul>
+                    </li>
+                    <li>
+                        <a href="blog.html">Blog</a>
+                    </li>
+                    <li>
+                        <a href="contact.html">Contact</a>
+                    </li>
+                </ul> <!-- //.nav-menu -->
+                <div class="canvas-contact">
+                      <div class="address-area">
+                          <div class="address-list">
+                              <div class="info-icon">
+                                  <i class="flaticon-location"></i>
+                              </div>
+                              <div class="info-content">
+                                  <h4 class="title">Address</h4>
+                                  <em>05 kandi BR. New York</em>
+                              </div>
+                          </div>
+                          <div class="address-list">
+                              <div class="info-icon">
+                                  <i class="flaticon-email"></i>
+                              </div>
+                              <div class="info-content">
+                                  <h4 class="title">Email</h4>
+                                  <em><a href="mailto:support@reactheme.com">support@reactheme.com</a></em>
+                              </div>
+                          </div>
+                          <div class="address-list">
+                              <div class="info-icon">
+                                  <i class="flaticon-call"></i>
+                              </div>
+                              <div class="info-content">
+                                  <h4 class="title">Phone</h4>
+                                  <em>+019988772</em>
+                              </div>
+                          </div>
+                      </div>
+                </div>
+            </nav>
+            <!-- Canvas Menu end -->                    
+        </header>
+        <!--Header End-->
+    </div> 
+</div>
+<!-- iframeFotter -->
+
+<!-- iframe footer -->
+<div style="position:absolute; height:0; padding-top:50%;width: 100%;">
+<footer id="rs-footer" class="rs-footer style1" style="background-image: url('https://rstheme.com/products/wordpress/evenio/wp-content/uploads/2021/09/footer-bg-5.jpg');">
+    <div class="footer-top">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-4 col-md-12 col-sm-12 md-mb-10">
+                    <div class="footer-logo mb-40">
+                        <a href="index.html"><img src="../assets/images/logo-light2.png" alt=""></a>
+                    </div>
+                </div>
+                <div class="col-lg-8">
+                    <div class="row">
+                        <div class="col-lg-4 col-md-12 col-sm-12 pl-45 md-pl-15">
+                            <h3 class="footer-title">Address</h3>
+                            <div class="textwidget">2096 New Market, New Road
+                            North Carolina, USA</div>
+                        </div>
+                        <div class="col-lg-4 col-md-12 col-sm-12 md-mb-10 pl-90 md-pl-15">
+                            <h3 class="footer-title">Call Us</h3>
+                            <div class="textwidget">
+                                <a href="mailto:support@reactheme.com">support@reactheme.com</a><br>
+                                <a href="tel:(+880)155-69569">(+880)155-69569</a>
+                            </div>
+                        </div>
+                        <div class="col-lg-4 col-md-12 col-sm-12 pl-115 md-pl-15">
+                            <h3 class="footer-title">Follow Us</h3>
+                            <ul class="footer-social">  
+                                <li> 
+                                    <a href="#"><i class="fa fa-facebook"></i></a>
+                                </li>
+                                <li> 
+                                    <a href="#"><i class="fa fa-twitter"></i></a> 
+                                </li>
+
+                                <li> 
+                                    <a href="#"><i class="fa fa-linkedin"></i></a>
+                                </li>
+
+                                <li> 
+                                    <a href="#"><i class="fa fa-instagram"></i></a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="footer-bottom">
+        <div class="container">                    
+            <div class="row y-middle">
+                <div class="col-lg-6 md-mb-10 text-lg-end text-center order-last">
+                    <ul class="copy-right-menu">
+                        <li><a href="index.html">Home</a></li>
+                        <li><a href="about.html">About</a></li>
+                        <li><a href="schedule.html">Schedule</a></li>
+                    </ul>
+                </div>
+                <div class="col-lg-6">
+                    <div class="copyright text-lg-start text-center ">
+                        <p>© 2022 Virtual Technopark, Industri Elektronika & Telematika - <br/>Developed By <a href="#">Subdit Software dan Konten</a></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</footer>
+</div>
+
+<!-- end iframeFotter -->
+</body>
+<script src="../assets/js/modernizr-2.8.3.min.js"></script>
+<!-- jquery latest version -->
+<script src="../assets/js/jquery.min.js"></script>
+<!-- Bootstrap v4.4.1 js -->
+<script src="../assets/js/bootstrap.min.js"></script>
+<!-- op nav js -->
+<script src="../assets/js/jquery.nav.js"></script>
+<!-- isotope.pkgd.min js -->
+<script src="../assets/js/isotope.pkgd.min.js"></script>
+<!-- imagesloaded js -->
+<script src="../assets/js/imagesloaded.pkgd.min.js"></script>
+<!-- owl.carousel js -->
+<script src="../assets/js/owl.carousel.min.js"></script>
+<!-- wow js -->
+<script src="../assets/js/wow.min.js"></script>
+<script src="../assets/js/paralax.min.js"></script>
+<script src="../assets/js/swiper.min.js"></script>
+<!-- Time Circle js -->
+<script src="../assets/js/time-circle.js"></script>
+<!-- Skill bar js -->
+<script src="../assets/js/skill.bars.jquery.js"></script>
+ <!-- waypoints.min js -->
+<script src="../assets/js/waypoints.min.js"></script>
+<!-- counterup.min js -->
+<script src="../assets/js/jquery.counterup.min.js"></script> 
+<!-- magnific popup js -->
+<script src="../assets/js/jquery.magnific-popup.min.js"></script>
+<!-- contact form js -->
+<script src="../assets/js/contact.form.js"></script>
+<!-- main js -->
+<script src="../assets/js/main.js"></script>
+</html>
